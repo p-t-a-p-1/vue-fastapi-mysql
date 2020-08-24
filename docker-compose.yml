@@ -1,0 +1,16 @@
+version: '3.8'
+# docker volume（拡張データ領域）の作成
+volumes:
+  docker-volume:
+
+# 各コンテナの設定
+services:
+  # Webサーバーコンテナ
+  web:
+    image: nginx:1.18
+  # Appサーバーコンテナ
+  app:
+    build: ./docker/python
+  # DBサーバーコンテナ
+  db:
+    image: mysql:5.7
