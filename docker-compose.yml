@@ -1,5 +1,5 @@
 version: '3.8'
-# docker volume（拡張データ領域）の作成
+# docker volume（データを永続的に保存できるようにする仕組み）の作成
 volumes:
   docker-volume:
 
@@ -8,9 +8,32 @@ services:
   # Webサーバーコンテナ
   web:
     image: nginx:1.18
+    ports:
+      - '8080:80'
+    # 先にappサーバーコンテナを起動する
+    depends_on:
+      - app
+    # ローカルとコンテナのファイル共有
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
   # Appサーバーコンテナ
   app:
     build: ./docker/python
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/var/www/html
   # DBサーバーコンテナ
   db:
     image: mysql:5.7
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+      MYSQL_ROOT_PASSWORD: root
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - docker-volume:/var/lib/mysql
