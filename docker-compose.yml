@@ -7,23 +7,22 @@ volumes:
 services:
   # Webサーバーコンテナ
   web:
-    image: nginx:1.18
+    build: ./docker/vue
     ports:
-      - '8080:80'
+      - '8080:8080'
     # 先にappサーバーコンテナを起動する
     depends_on:
       - app
     # ローカルとコンテナのファイル共有
     volumes:
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - .:/var/www/html
+      - .:/usr/src/app
   # Appサーバーコンテナ
   app:
     build: ./docker/python
     ports:
       - '8000:8000'
     volumes:
-      - .:/var/www/html
+      - .:/usr/src/app
   # DBサーバーコンテナ
   db:
     image: mysql:5.7
