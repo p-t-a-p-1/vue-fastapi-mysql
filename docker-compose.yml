@@ -13,16 +13,18 @@ services:
     # 先にappサーバーコンテナを起動する
     depends_on:
       - app
+    # コンテナの標準入力をオープンしたままにする
+    stdin_open: true
     # ローカルとコンテナのファイル共有
     volumes:
-      - .:/usr/src/app
+      - ./src:/usr/src/app
   # Appサーバーコンテナ
   app:
     build: ./docker/python
     ports:
       - '8000:8000'
     volumes:
-      - .:/usr/src/app
+      - ./src:/usr/src/app
   # DBサーバーコンテナ
   db:
     image: mysql:5.7
