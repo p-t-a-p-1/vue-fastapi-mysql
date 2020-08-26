@@ -13,8 +13,8 @@ services:
     # 先にappサーバーコンテナを起動する
     depends_on:
       - app
-    # コンテナの標準入力をオープンしたままにする
-    stdin_open: true
+    # コンテナ常に起動
+    tty: true
     # ローカルとコンテナのファイル共有
     volumes:
       - ./src:/usr/src/app
